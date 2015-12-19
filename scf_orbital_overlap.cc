@@ -41,6 +41,10 @@ int read_options(std::string name, Options& options)
         options.add_str("BASIS1","");
         /*- The larger basis -*/
         options.add_str("BASIS2","");
+        /*- The DF basis for basis 1 -*/
+        options.add_str("DF_BASIS1", "");
+        /*- The DF basis for basis 2 -*/
+        options.add_str("DF_BASIS2", "");
     }
 
     return true;
@@ -53,6 +57,7 @@ PsiReturnType scf_orbital_overlap(Options& options)
 
     // Run SCF with basis #1
     options.set_global_str("BASIS",options.get_str("BASIS1"));
+    options.set_global_str("DF_BASIS_SCF", options.get_str("DF_BASIS1"));
     outfile->Printf("\n  Switched to %s basis",options.get_str("BASIS").c_str());
 
     boost::shared_ptr<Wavefunction> scf_basis1(new scf::ROHF(options, psio));
@@ -62,6 +67,7 @@ PsiReturnType scf_orbital_overlap(Options& options)
 
     // Run SCF with basis #2
     options.set_global_str("BASIS",options.get_str("BASIS2"));
+    options.set_global_str("DF_BASIS_SCF", options.get_str("DF_BASIS2"));
     outfile->Printf("\n  Switched to %s basis",options.get_str("BASIS").c_str());
 
     PSIOManager::shared_object()->psiclean();
